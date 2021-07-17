@@ -19,8 +19,9 @@ app.use(
 	})
 );
 
+const PORT = process.env.PORT || 3000;
 connect(() => {
-	app.listen(3000, () => {
-		console.log('app started on port 3000!');
-	});
+	app.listen(PORT, () => {
+    console.log(`🚀 Service API ready at port ${PORT}`);
+  });
 });

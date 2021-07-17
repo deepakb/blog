@@ -1,6 +1,6 @@
 const { users, createUser } = require('./user');
-const { posts, createPost } = require('./post');
+const { posts, createPost, publishPost } = require("./post");
 
-const graphqlResolver = { users, posts, createUser, createPost };
+const graphqlResolver = { users, posts, createUser, createPost, publishPost };
 
 module.exports = graphqlResolver;
