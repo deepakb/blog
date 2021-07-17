@@ -1,0 +1,39 @@
+{
+  "name": "blog",
+  "version": "1.0.0",
+  "description": "A blog app build with GraphQL, Node.js, MongoDB and React.js.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deepakb/blog.git"
+  },
+  "keywords": [
+    "GraphQL",
+    "Node.js",
+    "Express",
+    "MongoDB",
+    "React.js",
+    "API",
+    "Blog"
+  ],
+  "author": "Deepak Biswal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/deepakb/blog/issues"
+  },
+  "homepage": "https://github.com/deepakb/blog#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "express": "^4.17.1",
+    "express-graphql": "^0.12.0",
+    "graphql": "^15.5.1",
+    "mongoose": "^5.13.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  }
+}
