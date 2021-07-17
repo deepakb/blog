@@ -5,6 +5,7 @@ const { getUserById } = require('../helpers/user');
 const posts = async () => {
 	try {
 		const posts = await Post.find();
+
 		return posts.map((post) => {
 			return {
 				...post._doc,
