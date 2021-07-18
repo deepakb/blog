@@ -5,7 +5,7 @@ const graphqlSchema = buildSchema(`
       _id: ID!
       title: String!
       description: String!
-      publishedOn: String!
+      publishedOn: String
       createdBy: User!
       createdAt: String!
       updatedAt: String!
@@ -14,6 +14,20 @@ const graphqlSchema = buildSchema(`
     input PostInput {
       title: String!
       description: String!
+    }
+
+    type Comment {
+      _id: ID!
+      description: String!
+      post: Post!
+      user: User!
+      createdAt: String!
+      updatedAt: String!
+    }
+
+    input CommentInput {
+      description: String!
+      postId: ID!
     }
 
     type User {
@@ -29,12 +43,12 @@ const graphqlSchema = buildSchema(`
 
     type apiQuery {
       posts: [Post!]!
-      users: [User!]!
     }
 
     type apiMutation {
       createPost(postInput: PostInput): Post
       publishPost(postId: ID!): Post
+      addComment(commentInput: CommentInput): Comment
       createUser(userInput: UserInput): User
     }
 
