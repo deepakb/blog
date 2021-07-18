@@ -11,19 +11,23 @@ module.exports = {
       throw error;
     }
   },
-  createPost: async args => {
+  createPost: async (args, req) => {
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+
     const { title, description } = args.postInput;
     const post = new Post({
       title,
       description,
-      createdBy: '60f291007bc6f20a3c90a0d9'
+      createdBy: req.userId
     });
     let createdPost;
 
     try {
       const result = await post.save();
       createdPost = transformPost(result);
-      const creator = await User.findById('60f291007bc6f20a3c90a0d9');
+      const creator = await User.findById(req.userId);
 
       if (!creator) {
         throw new Error('User not found.');
@@ -36,7 +40,11 @@ module.exports = {
       throw error;
     }
   },
-  publishPost: async args => {
+  publishPost: async (args, req) => {
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    
     try {
       const postId = args.postId;
       const post = await Post.findById(postId);

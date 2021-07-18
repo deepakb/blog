@@ -36,6 +36,12 @@ const graphqlSchema = buildSchema(`
       password: String
     }
 
+    type UserAuth {
+      userId: ID!
+      token: String!
+      tokenExpiration: Int!
+    }
+
     input UserInput {
       email: String!
       password: String!
@@ -43,6 +49,7 @@ const graphqlSchema = buildSchema(`
 
     type apiQuery {
       posts: [Post!]!
+      login(email: String!, password: String!): UserAuth!
     }
 
     type apiMutation {
