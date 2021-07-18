@@ -1,13 +1,13 @@
-const Comment = require("../models/comment");
-const { transformComment } = require("../helpers/transform");
+const Comment = require('../models/comment');
+const { transformComment } = require('../helpers/transform');
 
 module.exports = {
-  addComment: async (args) => {
+  addComment: async args => {
     const { description, postId } = args.commentInput;
     const comment = new Comment({
       description,
       post: postId,
-      user: "60f291007bc6f20a3c90a0d9",
+      user: '60f291007bc6f20a3c90a0d9'
     });
 
     try {
@@ -17,5 +17,5 @@ module.exports = {
     } catch (error) {
       throw error;
     }
-  },
+  }
 };

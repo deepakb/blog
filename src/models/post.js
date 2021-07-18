@@ -6,19 +6,19 @@ const PostSchema = new Schema(
   {
     title: {
       type: String,
-      required: true,
+      required: true
     },
     description: {
       type: String,
-      required: true,
+      required: true
     },
     publishedOn: {
-      type: Date,
+      type: Date
     },
     createdBy: {
       type: Schema.Types.ObjectId,
-      ref: "User",
-    },
+      ref: 'User'
+    }
   },
   { timestamps: true }
 );

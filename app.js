@@ -11,17 +11,17 @@ const app = express();
 app.use(express.json());
 
 app.use(
-	'/graphql',
-	graphqlHTTP({
-		schema: graphqlSchema,
-		rootValue: graphqlResolver,
-		graphiql: true,
-	})
+  '/graphql',
+  graphqlHTTP({
+    schema: graphqlSchema,
+    rootValue: graphqlResolver,
+    graphiql: true
+  })
 );
 
 const PORT = process.env.PORT || 3000;
 connect(() => {
-	app.listen(PORT, () => {
+  app.listen(PORT, () => {
     console.log(`🚀 Service API ready at port ${PORT}`);
   });
 });

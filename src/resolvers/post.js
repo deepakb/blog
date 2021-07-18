@@ -1,22 +1,22 @@
 const Post = require('../models/post');
 const User = require('../models/user');
-const { transformPost } = require("../helpers/transform");
+const { transformPost } = require('../helpers/transform');
 
 module.exports = {
   posts: async () => {
     try {
       const posts = await Post.find();
-      return posts.map((post) => transformPost(post));
+      return posts.map(post => transformPost(post));
     } catch (error) {
       throw error;
     }
   },
-  createPost: async (args) => {
+  createPost: async args => {
     const { title, description } = args.postInput;
     const post = new Post({
       title,
       description,
-      createdBy: "60f291007bc6f20a3c90a0d9",
+      createdBy: '60f291007bc6f20a3c90a0d9'
     });
     let createdPost;
 
@@ -36,13 +36,13 @@ module.exports = {
       throw error;
     }
   },
-  publishPost: async (args) => {
+  publishPost: async args => {
     try {
       const postId = args.postId;
       const post = await Post.findById(postId);
 
       if (!post) {
-        throw new Error("Post you are trying to publish not found!");
+        throw new Error('Post you are trying to publish not found!');
       }
 
       await Post.updateOne(
@@ -55,4 +55,4 @@ module.exports = {
       throw error;
     }
   }
-}
+};
