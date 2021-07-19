@@ -1,6 +1,6 @@
 const User = require('../models/user');
 const Post = require('../models/post');
-const { dateToString } = require('../helpers/date');
+const { dateToString } = require('./date');
 
 const getUserById = async userId => {
   try {
