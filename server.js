@@ -8,8 +8,6 @@ const graphqlSchema = require('./src/schema');
 const graphqlResolver = require('./src/resolvers');
 const isAuth = require('./src/middleware/is-auth');
 
-const PORT = process.env.PORT || 3000;
-
 const connection = connect();
 
 app.use(express.json());
