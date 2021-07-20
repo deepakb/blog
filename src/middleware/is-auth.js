@@ -3,20 +3,20 @@ const jwt = require('jsonwebtoken');
 const { appSecret } = require('../configs');
 
 module.exports = async (req, res, next) => {
-  const authHeader = req.get('Authorization');
+  const authHeader = req.headers.Authorization;
   const sendFalseHeader = () => {
     req.isAuth = false;
     return next();
   };
 
   if (!authHeader) {
-    sendFalseHeader();
+    return sendFalseHeader();
   }
 
   const token = authHeader.split(' ')[1];
 
   if (!token || token === '') {
-    sendFalseHeader();
+    return sendFalseHeader();
   }
 
   let hashToken;
@@ -24,11 +24,11 @@ module.exports = async (req, res, next) => {
   try {
     hashToken = await jwt.verify(token, appSecret);
   } catch (error) {
-    sendFalseHeader();
+    return sendFalseHeader();
   }
 
   if (!hashToken) {
-    sendFalseHeader();
+    return sendFalseHeader();
   }
 
   req.isAuth = true;
