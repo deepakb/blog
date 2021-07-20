@@ -17,13 +17,14 @@ module.exports = {
       const saltRounds = 12;
       const hash = await bcrypt.hash(password, saltRounds);
       const user = new User({ email, password: hash });
-      const result = await user.save();
+      const newUser = await user.save();
 
-      return { ...result._doc, _id: result.id };
+      return { ...newUser._doc, _id: newUser.id };
     } catch (error) {
       throw error;
     }
   },
+
   login: async ({ email, password }) => {
     try {
       const user = await User.findOne({ email });
@@ -45,6 +46,7 @@ module.exports = {
           expiresIn: '1h'
         }
       );
+
       return { userId: user.id, token, tokenExpiration: 1 };
     } catch (error) {
       throw error;

@@ -1,10 +1,11 @@
 const Comment = require('../models/comment');
 const { transformComment } = require('../helpers/transform');
+const { errors } = require('../configs');
 
 module.exports = {
   addComment: async (args, req) => {
     if (!req.isAuth) {
-      throw new Error('Unauthenticated!');
+      throw new Error(errors.unauthenticated);
     }
 
     const { description, postId } = args.commentInput;
@@ -15,9 +16,8 @@ module.exports = {
     });
 
     try {
-      const result = await comment.save();
-      const createdComment = transformComment(result);
-      return createdComment;
+      const newComment = await comment.save();
+      return transformComment(newComment);
     } catch (error) {
       throw error;
     }

@@ -1,6 +1,7 @@
 const Post = require('../models/post');
 const User = require('../models/user');
 const { transformPost } = require('../helpers/transform');
+const { errors } = require('../configs');
 
 module.exports = {
   posts: async () => {
@@ -11,9 +12,10 @@ module.exports = {
       throw error;
     }
   },
+
   createPost: async (args, req) => {
     if (!req.isAuth) {
-      throw new Error('Unauthenticated!');
+      throw new Error(errors.unauthenticated);
     }
 
     const { title, description } = args.postInput;
@@ -25,12 +27,12 @@ module.exports = {
     let createdPost;
 
     try {
-      const result = await post.save();
-      createdPost = transformPost(result);
+      const newPost = await post.save();
+      createdPost = transformPost(newPost);
       const creator = await User.findById(req.userId);
 
       if (!creator) {
-        throw new Error('User not found.');
+        throw new Error(errors.userNotExist);
       }
       creator.posts.push(post);
       await creator.save();
@@ -40,9 +42,10 @@ module.exports = {
       throw error;
     }
   },
+
   publishPost: async (args, req) => {
     if (!req.isAuth) {
-      throw new Error('Unauthenticated!');
+      throw new Error(errors.unauthenticated);
     }
     
     try {
@@ -50,7 +53,7 @@ module.exports = {
       const post = await Post.findById(postId);
 
       if (!post) {
-        throw new Error('Post you are trying to publish not found!');
+        throw new Error(errors.postNotFound);
       }
 
       await Post.updateOne(

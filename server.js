@@ -3,9 +3,9 @@ const { graphqlHTTP } = require('express-graphql');
 
 const { app, listen } = require('./app');
 
-const connect = require('./src/helpers/database');
 const graphqlSchema = require('./src/schema');
 const graphqlResolver = require('./src/resolvers');
+const connect = require('./src/helpers/database');
 const isAuth = require('./src/middleware/is-auth');
 
 const connection = connect();
