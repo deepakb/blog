@@ -3,24 +3,25 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/client';
 
 import client from '../graphql/client';
+import Layout from './Layout';
 import Posts from '../pages/Posts';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
 
-function App() {
+const App = () => {
   return (
     <ApolloProvider client={client}>
       <Router>
-        <div className="app">
+        <Layout>
           <Switch>
-            <Route exact path="/" component={Login} />
-            <Route path="/register" component={Register} />
-            <Route path="/blog" component={Posts} />
+            <Route exact path='/' component={Login} />
+            <Route path='/register' component={Register} />
+            <Route path='/blog' component={Posts} />
           </Switch>
-        </div>
+        </Layout>
       </Router>
     </ApolloProvider>
   );
-}
+};
 
 export default App;

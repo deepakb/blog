@@ -1,6 +1,6 @@
 const Post = ({ id, title, description }) => {
   return (
-    <div className="post">
+    <div className='post'>
       <h1>{title}</h1>
       <p>{description}</p>
     </div>
