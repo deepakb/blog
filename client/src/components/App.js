@@ -7,6 +7,7 @@ import Layout from './Layout';
 import Posts from '../pages/Posts';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
+import Dashboard from '../pages/Dashboard';
 
 const App = () => {
   return (
@@ -14,7 +15,8 @@ const App = () => {
       <Router>
         <Layout>
           <Switch>
-            <Route exact path='/' component={Login} />
+            <Route exact path='/' component={Dashboard} />
+            <Route path='/login' component={Login} />
             <Route path='/register' component={Register} />
             <Route path='/blog' component={Posts} />
           </Switch>

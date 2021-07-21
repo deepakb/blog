@@ -1,5 +1,13 @@
+import Logo from './Logo';
+import Navigation from './Navigation';
+
 const Header = () => {
-  return <h1>HEADER</h1>;
+  return (
+    <>
+      <Logo />
+      <Navigation />
+    </>
+  );
 };
 
 export default Header;
