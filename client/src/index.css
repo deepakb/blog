@@ -30,38 +30,6 @@ body {
   overflow: hidden;
 }
 
-.app {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-.header {
-  height: 15vh;
-  width: 100%;
-  display: flex;
-  align-items: center;
-}
-
-.menu {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  height: 100%;
-  width: 100%;
-  margin-right: 2rem;
-}
-
-.menu-item {
-  list-style: none;
-  padding: 2rem;
-}
-
-.menu-item a {
-  color: #00C3CC;
-  text-decoration: none;
-}
-
 .container {
   height: 85vh;
   width: 100%;

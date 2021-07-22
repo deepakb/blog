@@ -1,0 +1,28 @@
+.menu {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+  margin-right: 2rem;
+}
+
+.menu-item {
+  list-style: none;
+  font-size: 1vw;
+}
+
+.menu-item a {
+  color: #00C3CC;
+  text-decoration: none;
+}
+
+.menu-item-content {
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-item-content span {
+  margin-right: 0.5rem;
+}

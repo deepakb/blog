@@ -2,12 +2,12 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/client';
 
-import client from '../graphql/client';
-import Layout from './Layout';
-import Posts from '../pages/Posts';
-import Login from '../pages/Login';
-import Register from '../pages/Register';
-import Dashboard from '../pages/Dashboard';
+import client from '../../graphql/client';
+import Layout from '../Layout';
+import Posts from '../../pages/Posts';
+import Login from '../../pages/Login';
+import Register from '../../pages/Register';
+import Dashboard from '../../pages/Dashboard';
 
 const App = () => {
   return (
