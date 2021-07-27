@@ -6,7 +6,7 @@ const User = require('../models/user');
 
 module.exports = {
   createUser: async args => {
-    const { email, password } = args.userInput;
+    const { email, password, firstName, lastName, displayName } = args.userInput;
 
     try {
       const isUserExist = await User.findOne({ email });
@@ -16,10 +16,10 @@ module.exports = {
 
       const saltRounds = 12;
       const hash = await bcrypt.hash(password, saltRounds);
-      const user = new User({ email, password: hash });
+      const user = new User({ email, password: hash, firstName, lastName, displayName });
       const newUser = await user.save();
 
-      return { ...newUser._doc, _id: newUser.id };
+      return { _id: newUser.id };
     } catch (error) {
       throw error;
     }
@@ -28,13 +28,11 @@ module.exports = {
   login: async ({ email, password }) => {
     try {
       const user = await User.findOne({ email });
-
       if (!user) {
         throw new Error(errors.userNotExist);
       }
 
       const isPasswordMatch = await bcrypt.compare(password, user.password);
-
       if (!isPasswordMatch) {
         throw new Error(errors.passwordNotCorrect);
       }

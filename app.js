@@ -24,7 +24,7 @@ const startServer = ({ port = process.env.PORT} = {}) => {
 
   return new Promise(resolve => {
     const server = app.listen(port, () => {
-      logger.info(`Listening on port ${server.address().port}.`);
+      logger.info(`Listening on port ${server.address().port}`);
       resolve(server);
     });
   });

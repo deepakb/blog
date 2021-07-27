@@ -32,8 +32,6 @@ const graphqlSchema = buildSchema(`
 
     type User {
       _id: ID!
-      email: String!,
-      password: String
     }
 
     type UserAuth {
@@ -45,6 +43,9 @@ const graphqlSchema = buildSchema(`
     input UserInput {
       email: String!
       password: String!
+      firstName: String!
+      lastName: String!
+      displayName: String
     }
 
     type apiQuery {
@@ -56,7 +57,7 @@ const graphqlSchema = buildSchema(`
       createPost(postInput: PostInput): Post
       publishPost(postId: ID!): Post
       addComment(commentInput: CommentInput): Comment
-      createUser(userInput: UserInput): User
+      createUser(userInput: UserInput): User!
     }
 
     schema {
