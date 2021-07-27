@@ -1,9 +1,9 @@
-const start = require('./app');
-const connect = require('./src/helpers/database');
+const logger = require('loglevel');
+const startServer = require('./app');
+const initDB = require('./src/helpers/database');
 
-const connection = connect();
+logger.setLevel('info');
 
-connection
-  .on('error', console.log)
-  .on('disconnected', connect)
-  .once('open', start);
+initDB()
+  .then(connection => startServer())
+  .catch(err => console.log(err));
