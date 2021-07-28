@@ -1,7 +1,5 @@
 const jwt = require('jsonwebtoken');
 
-const { appSecret } = require('../configs');
-
 module.exports = async (req, res, next) => {
   const authHeader = req.headers.Authorization;
   const sendFalseHeader = () => {
@@ -22,7 +20,7 @@ module.exports = async (req, res, next) => {
   let hashToken;
 
   try {
-    hashToken = await jwt.verify(token, appSecret);
+    hashToken = await jwt.verify(token, process.env.APP_SECRET);
   } catch (error) {
     return sendFalseHeader();
   }

@@ -3,10 +3,10 @@ const logger = require('loglevel');
 
 const { mongoAtlasConfig, mongoURL } = require('../configs');
 
-const initDB = () => {
+const initDB = (mongoDbUrl = null) => {
   return new Promise(async (resolve, reject) => {
     try {
-      await mongoose.connect(mongoURL, mongoAtlasConfig);
+      await mongoose.connect(mongoDbUrl || mongoURL, mongoAtlasConfig);
       logger.info(`Connected to the MongoDB instance`);
       resolve(mongoose.connection); 
     } catch (error) {

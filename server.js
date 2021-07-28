@@ -1,3 +1,4 @@
+require('dotenv').config();
 const logger = require('loglevel');
 const startServer = require('./app');
 const initDB = require('./src/helpers/database');
