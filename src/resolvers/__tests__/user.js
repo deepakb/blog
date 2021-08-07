@@ -1,66 +1,29 @@
-const axios = require('axios');
 const startServer = require('../../../app');
 const initDB = require('../../helpers/database');
-const { resetTestDb } = require('../../../test/helpers/database');
+const resetTestDb = require('../../../test/helpers/database');
 const { registerInput } = require('../../../test/helpers/mock');
+const generateQuery = require('../../../test/helpers/query');
 const { mongoTestURL, errors } = require('../../configs');
 
 let server, connection, graphQlEndPoint;
 
 beforeAll(async () => {
-    server = await startServer();
-    connection = await initDB(mongoTestURL);
-    graphQlEndPoint = `http://localhost:${server.address().port}/graphql`;
+  server = await startServer();
+  connection = await initDB(mongoTestURL);
+  graphQlEndPoint = `http://localhost:${server.address().port}/graphql`;
 });
 
-afterAll(() => {
-    server.close()
+afterAll(async () => {
+    //await resetTestDb(connection);
+    server.close();
     connection.close();
 });
 
 beforeEach(() => resetTestDb(connection));
 
-const createUser = async () => {
-  const { email, password, firstName, lastName, displayName } = registerInput();
-
-  return await axios({
-    url: graphQlEndPoint,
-    method: 'post',
-    data: {
-      query: `mutation {
-      createUser(userInput: {
-        email: \"${email}\",
-        password: \"${password}\",
-        firstName: \"${firstName}\",
-        lastName: \"${lastName}\",
-        displayName: \"${displayName}\"
-      }) { 
-            _id
-          }
-      }`
-    }});
-};
-
-const login = async ({ e, p } = {}) => {
-  const { email, password } = registerInput();
-
-  return await axios({
-    url: graphQlEndPoint,
-    method: 'post',
-    data: {
-      query: `query {
-      login(email: \"${e || email}\",
-        password: \"${p || password}\") { 
-            userId
-            token
-            tokenExpiration
-          }
-      }`
-    }});
-};
-
 describe('user resolver flow', () => {
   test('success register flow', async () => {
+    const { createUser } = generateQuery(graphQlEndPoint);
     const response = await createUser();
 
     expect(response).not.toBeNull();
@@ -75,6 +38,7 @@ describe('user resolver flow', () => {
   });
 
   test('failure register flow::email already exist', async () => {
+    const { createUser } = generateQuery(graphQlEndPoint);
     await createUser();
 
     await createUser().catch(err => {
@@ -88,6 +52,7 @@ describe('user resolver flow', () => {
   });
 
   test('success login flow', async () => {
+    const { createUser, login } = generateQuery(graphQlEndPoint);
     const user = await createUser();
     const response = await login();
 
@@ -107,6 +72,7 @@ describe('user resolver flow', () => {
   });
 
   test('failure login flow::email not exist', async () => {
+    const { createUser, login } = generateQuery(graphQlEndPoint);
     const user = await createUser();
 
     await login({ e: 'invalid@notexist.com' }).catch(err => {
@@ -120,6 +86,7 @@ describe('user resolver flow', () => {
   });
 
   test('failure login flow::password not correct', async () => {
+    const { createUser, login } = generateQuery(graphQlEndPoint);
     const user = await createUser();
 
     await login({ p: 'invalidpassword' }).catch(err => {

@@ -6,4 +6,4 @@ const resetTestDb = async (connection) => {
     }
 };
 
-module.exports = { resetTestDb };
+module.exports = resetTestDb;

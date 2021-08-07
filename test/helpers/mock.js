@@ -1,11 +1,11 @@
-const registerInput = () => {
-    return {
-        email: 'john@example.com',
-        password: 'john!123',
-        firstName: 'John',
-        lastName: 'Doe',
-        displayName: 'johndoe'
-    };
-}
+const registerInput = {
+    email: 'john@example.com',
+    password: 'john!123',
+    firstName: 'John',
+    lastName: 'Doe',
+    displayName: 'johndoe'
+};
 
-module.exports = { registerInput };
+const postInput = { title: 'Test Blog Post', description: 'Test Blog description' };
+
+module.exports = { registerInput, postInput };
