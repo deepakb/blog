@@ -86,6 +86,24 @@ const generateQuery = (graphQlEndPoint) => {
         postConfig.headers = { 'Authorization': `Bearer ${token}` };
       }
       return await axios(postConfig);
+    },
+    posts: async () => {
+      return await axios({
+        url: graphQlEndPoint,
+        method: 'post',
+        data: {
+          query: `query {
+          posts { 
+                _id
+                title
+                description
+                publishedOn
+                createdBy {
+                  _id
+                }
+              }
+          }`
+        }});
     }
   }
 };
