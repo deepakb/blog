@@ -7,5 +7,6 @@ const registerInput = {
 };
 
 const postInput = { title: 'Test Blog Post', description: 'Test Blog description' };
+const commentInput = { description: 'This is a test comment' };
 
-module.exports = { registerInput, postInput };
+module.exports = { registerInput, postInput, commentInput };

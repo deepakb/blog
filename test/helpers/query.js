@@ -104,6 +104,25 @@ const generateQuery = (graphQlEndPoint) => {
               }
           }`
         }});
+    },
+    addComment: async (postId, description, token) => {
+      const commentConfig = {
+        url: graphQlEndPoint,
+        method: 'post',
+        data: {
+          query: `mutation {
+          addComment(commentInput: {
+            description: \"${description}\",
+            postId: \"${postId}\"
+          }) { 
+            _id
+          }}`
+        }};
+      
+      if (token) {
+        commentConfig.headers = { 'Authorization': `Bearer ${token}` };
+      }
+      return await axios(commentConfig);
     }
   }
 };
