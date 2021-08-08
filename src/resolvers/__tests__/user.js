@@ -1,7 +1,6 @@
 const startServer = require('../../../app');
 const initDB = require('../../helpers/database');
 const resetTestDb = require('../../../test/helpers/database');
-const { registerInput } = require('../../../test/helpers/mock');
 const generateQuery = require('../../../test/helpers/query');
 const { mongoTestURL, errors } = require('../../configs');
 
@@ -14,7 +13,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-    //await resetTestDb(connection);
+    await resetTestDb(connection);
     server.close();
     connection.close();
 });
@@ -24,11 +23,11 @@ beforeEach(() => resetTestDb(connection));
 describe('user resolver flow', () => {
   test('success register flow', async () => {
     const { createUser } = generateQuery(graphQlEndPoint);
-    const response = await createUser();
+    const createUserResponse = await createUser();
 
-    expect(response).not.toBeNull();
-    expect(response.data).not.toBeNull();
-    const { data } = response.data;
+    expect(createUserResponse).not.toBeNull();
+    expect(createUserResponse.data).not.toBeNull();
+    const { data } = createUserResponse.data;
     expect(data).not.toBeNull();
     expect(data.createUser).not.toBeNull();
     expect(data.createUser._id).not.toBeNull();
@@ -41,13 +40,12 @@ describe('user resolver flow', () => {
     const { createUser } = generateQuery(graphQlEndPoint);
     await createUser();
 
-    await createUser().catch(err => {
-      expect(err).not.toBeNull();
-      expect(err.response).not.toBeNull();
-      expect(err.response.data).not.toBeNull();
-      expect(err.response.data.errors).not.toBeNull();
-      const error = err.response.data.errors;
-      expect(error[0].message).toBe(errors.emailExist);
+    await createUser().catch(errCreateUserResponse => {
+      expect(errCreateUserResponse).not.toBeNull();
+      const { data } = errCreateUserResponse.response;
+      expect(data).not.toBeNull();
+      expect(data.errors).not.toBeNull();
+      expect(data.errors[0].message).toBe(errors.emailExist);
     });
   });
 

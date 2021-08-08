@@ -14,7 +14,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-    //await resetTestDb(connection);
+    await resetTestDb(connection);
     server.close();
     connection.close();
 });
@@ -84,13 +84,13 @@ describe('post resolver flow', () => {
     await createUser();
     const loginResponse = await login();
     const token = loginResponse.data.data.login.token;
-    const postResponse = await createPost(token);
+    await createPost(token);
 
-    const response = await publishPost('610e6554963acd4356a1d0f9', token);
-    expect(response).not.toBeNull();
-    expect(response.data).not.toBeNull();
-    expect(response.data.errors).not.toBeNull();
-    expect(response.data.errors[0].message).toBe(errors.postNotFound);
+    const pubishResponse = await publishPost('610e6554963acd4356a1d0f9', token);
+    expect(pubishResponse).not.toBeNull();
+    expect(pubishResponse.data).not.toBeNull();
+    expect(pubishResponse.data.errors).not.toBeNull();
+    expect(pubishResponse.data.errors[0].message).toBe(errors.postNotFound);
   });
 
   test('success publish post flow: correct token and post id set', async () => {
@@ -104,8 +104,9 @@ describe('post resolver flow', () => {
 
     expect(pubishResponse).not.toBeNull();
     expect(pubishResponse.data).not.toBeNull();
-    expect(pubishResponse.data.data).not.toBeNull();
-    expect(pubishResponse.data.data.publishPost).not.toBeNull();
-    expect(pubishResponse.data.data.publishPost.createdBy._id).toBe(user.data.data.createUser._id);
+    const response = pubishResponse.data;
+    expect(response).not.toBeNull();
+    expect(response.publishPost).not.toBeNull();
+    expect(response.publishPost.createdBy._id).toBe(user.data.data.createUser._id);
   });
 });
