@@ -101,6 +101,10 @@ const generateQuery = (graphQlEndPoint) => {
                 createdBy {
                   _id
                 }
+                comments {
+                  _id
+                  description
+                }
               }
           }`
         }});

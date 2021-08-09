@@ -9,6 +9,7 @@ const graphqlSchema = buildSchema(`
       createdBy: User!
       createdAt: String!
       updatedAt: String!
+      comments: [Comment]
     }
 
     input PostInput {

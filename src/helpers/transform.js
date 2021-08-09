@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const Post = require('../models/post');
+const Comment = require('../models/comment');
 const { dateToString } = require('./date');
 
 const getUserById = async userId => {
@@ -30,6 +31,22 @@ const getPostsByIds = async postIds => {
     });
     return posts;
   } catch (err) {
+    throw err;
+  }
+};
+
+const getCommentsByIds = async commentIds => {
+  try {
+    const comments = await Comment.find({ _id: { $in: commentIds } });
+    comments.map(comment => {
+      return {
+        ...comment._doc,
+        _id: comment.id
+      };
+    });
+    return comments;
+  } catch (err) {
+    console.log(err);
     throw err;
   }
 };
@@ -70,7 +87,8 @@ const transformPost = post => {
       : null,
     createdAt: dateToString(post._doc.createdAt),
     updatedAt: dateToString(post._doc.updatedAt),
-    createdBy: getUserById.bind(this, post._doc.createdBy)
+    createdBy: getUserById.bind(this, post._doc.createdBy),
+    comments: getCommentsByIds.bind(this, post._doc.comments)
   };
 };
 

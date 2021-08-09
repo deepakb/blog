@@ -22,32 +22,62 @@ afterAll(async () => {
 beforeEach(() => resetTestDb(connection));
 
 describe('comment resolver flow', () => {
-  test('success add comment flow', async () => {
-    const { createUser, login, createPost, posts, addComment } =
+  test('success add comment flow: verify addComment response', async () => {
+    const { createUser, login, createPost, addComment } =
       generateQuery(graphQlEndPoint);
 
-    const user = await createUser();
+    await createUser();
     const loginResponse = await login();
     const token = loginResponse.data.data.login.token;
     const postResponse = await createPost(token);
     const commentResponse = await addComment(
-      postResponse.data.data.createPost._id,
-      commentInput.description,
-      token
-    );
+        postResponse.data.data.createPost._id,
+        commentInput.description,
+        token
+      );
 
-    expect(commentResponse).not.toBeNull();
-    expect(commentResponse.data).not.toBeNull();
-    expect(commentResponse.data.data).not.toBeNull();
-    expect(commentResponse.data.data.addComment).not.toBeNull();
-    expect(commentResponse.data.data.addComment._id).not.toBeNull();
+    const reponse = commentResponse.data.data.addComment;
+    expect(reponse).not.toBeNull();
+    expect(reponse._id).not.toBeNull();
   });
 
-  test('success add comment flow: verify comment data', async () => {
+  test('failure add comment flow: invalid token set', async () => {
+    const { createUser, login, createPost, addComment } =
+      generateQuery(graphQlEndPoint);
+
+    await createUser();
+    const loginResponse = await login();
+    const token = loginResponse.data.data.login.token;
+    const postResponse = await createPost(token);
+    const commentResponse = await addComment(
+        postResponse.data.data.createPost._id,
+        commentInput.description,
+        'invalidusertoken'
+      );
+
+    expect(commentResponse.data.errors[0].message).toBe(errors.unauthenticated);
+  });
+
+  test('failure add comment flow: valid token set but passed invalid post id', async () => {
+    const { createUser, login, addComment } = generateQuery(graphQlEndPoint);
+
+    await createUser();
+    const loginResponse = await login();
+    const token = loginResponse.data.data.login.token;
+    const commentResponse = await addComment(
+        '6110fdb9a9140d8547042c35',
+        commentInput.description,
+        token
+      );
+
+    expect(commentResponse.data.errors[0].message).toBe(errors.postNotFound);
+  });
+
+  test('success add comment flow: verify post response with comment data', async () => {
     const { createUser, login, createPost, posts, addComment } =
       generateQuery(graphQlEndPoint);
 
-    const user = await createUser();
+    await createUser();
     const loginResponse = await login();
     const token = loginResponse.data.data.login.token;
     const postResponse = await createPost(token);
@@ -57,12 +87,11 @@ describe('comment resolver flow', () => {
       token
     );
 
-    expect(commentResponse).not.toBeNull();
-    expect(commentResponse.data).not.toBeNull();
-    expect(commentResponse.data.data).not.toBeNull();
-    expect(commentResponse.data.data.addComment).not.toBeNull();
-    expect(commentResponse.data.data.addComment._id).not.toBeNull();
-
-    //TODO: Verify actuall comment with data
+    const commentId = commentResponse.data.data.addComment._id;
+    const commentDescription = commentInput.description;
+    const postsResponse = await posts();
+    const response = postsResponse.data.data.posts;
+    expect(response[0].comments[0]._id).toBe(commentId);
+    expect(response[0].comments[0].description).toBe(commentDescription);
   });
 });

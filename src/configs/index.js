@@ -4,7 +4,7 @@ module.exports = {
     userNotExist: 'User does not exist!',
     passwordNotCorrect: 'Password is not correct!',
     unauthenticated: 'Unauthenticated',
-    postNotFound: 'Post you are trying to publish not found!'
+    postNotFound: 'Post does not exist!'
   },
 
   mongoURL: `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@blog-api.o6bqb.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`,
