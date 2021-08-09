@@ -24,20 +24,18 @@ beforeEach(() => resetTestDb(connection));
 describe('post resolver flow', () => {
   test('failure post create flow: token not set', async () => {
     const { createPost } = generateQuery(graphQlEndPoint);
-    const response = await createPost();
+    const createPostResponse = await createPost();
+    const response = createPostResponse.data.errors;
     expect(response).not.toBeNull();
-    expect(response.data).not.toBeNull();
-    expect(response.data.errors).not.toBeNull();
-    expect(response.data.errors[0].message).toBe(errors.unauthenticated);
+    expect(response[0].message).toBe(errors.unauthenticated);
   });
 
   test('failure post create flow: invalid token set', async () => {
     const { createPost } = generateQuery(graphQlEndPoint);
-    const response = await createPost('invalidtokenstring');
+    const createPostResponse = await createPost('invalidtokenstring');
+    const response = createPostResponse.data.errors;
     expect(response).not.toBeNull();
-    expect(response.data).not.toBeNull();
-    expect(response.data.errors).not.toBeNull();
-    expect(response.data.errors[0].message).toBe(errors.unauthenticated);
+    expect(response[0].message).toBe(errors.unauthenticated);
   });
 
   test('success post create flow: correct token is set', async () => {
@@ -47,20 +45,18 @@ describe('post resolver flow', () => {
     const loginResponse = await login();
     const token = loginResponse.data.data.login.token;
     const postResponse = await createPost(token);
+    const response = postResponse.data.data.createPost;
 
-    expect(postResponse).not.toBeNull();
-    expect(postResponse.data).not.toBeNull();
-    expect(postResponse.data.data).not.toBeNull();
-    expect(postResponse.data.data.createPost).not.toBeNull();
-    expect(postResponse.data.data.createPost).toEqual({
+    expect(response).not.toBeNull();
+    expect(response).toEqual({
       _id: expect.any(String),
       title: expect.any(String),
       description: expect.any(String),
       createdBy: expect.any(Object)
     });
-    expect(postResponse.data.data.createPost.createdBy._id).toBe(user.data.data.createUser._id);
-    expect(postResponse.data.data.createPost.title).toBe(postInput.title);
-    expect(postResponse.data.data.createPost.description).toBe(postInput.description);
+    expect(response.createdBy._id).toBe(user.data.data.createUser._id);
+    expect(response.title).toBe(postInput.title);
+    expect(response.description).toBe(postInput.description);
   });
 
   test('failure publish post flow: invalid token and valid post id set', async () => {
@@ -70,12 +66,10 @@ describe('post resolver flow', () => {
     const loginResponse = await login();
     const token = loginResponse.data.data.login.token;
     const postResponse = await createPost(token);
-
-    const response = await publishPost(postResponse.data.data.createPost._id, 'invalidtokenstring');
+    const publishPostResponse = await publishPost(postResponse.data.data.createPost._id, 'invalidtokenstring');
+    const response = publishPostResponse.data.errors;
     expect(response).not.toBeNull();
-    expect(response.data).not.toBeNull();
-    expect(response.data.errors).not.toBeNull();
-    expect(response.data.errors[0].message).toBe(errors.unauthenticated);
+    expect(response[0].message).toBe(errors.unauthenticated);
   });
 
   test('failure publish post flow: valid token and invalid post id set', async () => {
@@ -85,12 +79,10 @@ describe('post resolver flow', () => {
     const loginResponse = await login();
     const token = loginResponse.data.data.login.token;
     await createPost(token);
-
-    const pubishResponse = await publishPost('610e6554963acd4356a1d0f9', token);
-    expect(pubishResponse).not.toBeNull();
-    expect(pubishResponse.data).not.toBeNull();
-    expect(pubishResponse.data.errors).not.toBeNull();
-    expect(pubishResponse.data.errors[0].message).toBe(errors.postNotFound);
+    const publishPostResponse = await publishPost('610e6554963acd4356a1d0f9', token);
+    const response = publishPostResponse.data.errors;
+    expect(response).not.toBeNull();
+    expect(response[0].message).toBe(errors.postNotFound);
   });
 
   test('success publish post flow: correct token and post id set', async () => {
@@ -100,13 +92,11 @@ describe('post resolver flow', () => {
     const loginResponse = await login();
     const token = loginResponse.data.data.login.token;
     const postResponse = await createPost(token);
-    const pubishResponse = await publishPost(postResponse.data.data.createPost._id, token);
+    const publishPostResponse = await publishPost(postResponse.data.data.createPost._id, token);
+    const response = publishPostResponse.data.data.publishPost;
 
-    expect(pubishResponse).not.toBeNull();
-    expect(pubishResponse.data).not.toBeNull();
-    expect(pubishResponse.data.data).not.toBeNull();
-    expect(pubishResponse.data.data.publishPost).not.toBeNull();
-    expect(pubishResponse.data.data.publishPost.createdBy._id).toBe(user.data.data.createUser._id);
+    expect(response).not.toBeNull();
+    expect(response.createdBy._id).toBe(user.data.data.createUser._id);
   });
 
   test('success publish post flow and verify by posts flow', async () => {
@@ -116,15 +106,11 @@ describe('post resolver flow', () => {
     const loginResponse = await login();
     const token = loginResponse.data.data.login.token;
     const postResponse = await createPost(token);
-    const pubishResponse = await publishPost(postResponse.data.data.createPost._id, token);
+    await publishPost(postResponse.data.data.createPost._id, token);
     const postsResponse = await posts();
-
-
-    expect(postsResponse).not.toBeNull();
-    expect(postsResponse.data).not.toBeNull();
-    expect(postsResponse.data.data).not.toBeNull();
-    expect(postsResponse.data.data.posts).not.toBeNull();
     const [ createdPost ] = postsResponse.data.data.posts;
+
+    expect(createdPost).not.toBeNull();
     expect(createdPost._id).not.toBeNull();
     expect(createdPost.title).not.toBeNull();
     expect(createdPost.description).not.toBeNull();
